@@ -18,3 +18,6 @@ Please finish the following tasks:
 - Download no less than two categories of these metadata.
 - Referring the example code in this repo, convert each line in the downloaded files into a POJO of `Product` class and save the object in a database like MySQL. 
 - Integrate the database containing Amazon products with your own AW04 project and build an Amazon WebPOS system.
+
+
+And, of course, always try to make the system run as fast as possible.

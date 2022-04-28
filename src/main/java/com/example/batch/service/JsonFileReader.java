@@ -1,48 +1,59 @@
 package com.example.batch.service;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemReader;
 
-public class JsonReader implements StepExecutionListener, ItemReader<JsonNode> {
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
-    private final String FILE_NAME = "data/meta_Magazine_Subscriptions_100.json";
+public class JsonFileReader implements StepExecutionListener, ItemReader<JsonNode> {
 
     private BufferedReader reader;
 
     private ObjectMapper objectMapper;
 
+    private String fileName;
+
+    public JsonFileReader(String file) {
+        if (file.matches("^file:(.*)"))
+            file = file.substring(file.indexOf(":") + 1);
+        this.fileName = file;
+    }
+
     private void initReader() throws FileNotFoundException {
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        File file = new File(classLoader.getResource(FILE_NAME).getFile());
+        File file = new File(fileName);
         reader = new BufferedReader(new FileReader(file));
     }
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        objectMapper = new ObjectMapper();
     }
 
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
-
         return null;
     }
 
     @Override
     public JsonNode read() throws Exception {
+        if (objectMapper == null)
+            objectMapper = new ObjectMapper();
+
         if (reader == null) {
             initReader();
         }
-        return objectMapper.readTree(reader.readLine());
+
+        String line = reader.readLine();
+
+        if (line != null)
+            return objectMapper.readTree(reader.readLine());
+        else
+            return null;
     }
 }

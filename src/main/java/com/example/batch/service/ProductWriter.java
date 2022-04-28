@@ -8,7 +8,7 @@ import org.springframework.batch.item.ItemWriter;
 
 import java.util.List;
 
-public class ProductWriter implements ItemWriter<Product> , StepExecutionListener {
+public class ProductWriter implements ItemWriter<Product>, StepExecutionListener {
     @Override
     public void beforeStep(StepExecution stepExecution) {
 
@@ -21,7 +21,7 @@ public class ProductWriter implements ItemWriter<Product> , StepExecutionListene
 
     @Override
     public void write(List<? extends Product> list) throws Exception {
-        list.stream().forEach(System.out::println);
-        System.out.println("chunk written");
+//        list.stream().forEach(System.out::println);
+//        System.out.println("chunk written");
     }
 }
